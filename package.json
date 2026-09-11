@@ -9,7 +9,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "build:desktop": "vite build && electron-packager . --platform=win32 --arch=x64 --out=release --overwrite"
+    "build:desktop": "vite build && electron-packager . --platform=win32 --arch=x64 --out=release --overwrite --icon=build/icon.ico --executable-name=GestaoManutencao"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",
@@ -24,6 +24,8 @@
     "@vitejs/plugin-react": "^4.3.1",
     "electron": "^31.7.7",
     "electron-packager": "^17.1.2",
+    "jimp": "^1.6.1",
+    "png-to-ico": "^3.0.2",
     "typescript": "^5.5.4",
     "vite": "^5.4.3"
   },
