@@ -7,6 +7,7 @@
   --bg-grad-a: #eef2ff;
   --bg-grad-b: #f8fafc;
   --card-bg: #ffffff;
+  --card-glass: rgba(255, 255, 255, 0.84);
   --text-main: #0f172a;
   --text-muted: #64748b;
   --border-color: #cbd5e1;
@@ -21,6 +22,7 @@
 }
 
 body.dark-mode {
+  --card-glass: rgba(20, 31, 54, 0.84);
   --bg: #0a1120;
   --bg-grad-a: #0a1120;
   --bg-grad-b: #0f1b33;
@@ -268,6 +270,14 @@ body.dark-mode .badge-concluido { background: #0e3818; color: #81c784; border-co
 .custom-modal h3 { margin-top: 0; color: var(--text-main); }
 .custom-modal p { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; white-space: pre-wrap; }
 .custom-modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+
+/* Cards translúcidos (glass): mostram o plano de fundo; campos continuam sólidos */
+.form-container, .filter-card, .table-container, .kpi-card, .chart-card,
+.home-pulse-card, .home-critical-box, .home-links-box, .login-card, .custom-modal {
+  background: var(--card-glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
 
 @media (max-width: 900px) {
   /* Mobile: barra de título só na aba Início; abas congeladas no topo só com ícones */
