@@ -103,20 +103,22 @@ export function dataHoje(): string {
 
 // Ícones de categoria para os pinos do mapa
 const CATEGORIA_ICONES: { palavras: string[]; icone: string }[] = [
-  { palavras: ['hidrossanitario', 'hidraulica', 'hidro', 'agua', 'encanamento', 'esgoto', 'torneira'], icone: '💧' },
-  { palavras: ['eletrica', 'eletro', 'energia', 'retifica', 'lampada', 'iluminacao'], icone: '⚡' },
-  { palavras: ['civil', 'estrutura', 'alvenaria', 'muro', 'concreto', 'patologia', 'rachadura', 'fissura'], icone: '🧱' },
+  { palavras: ['fechadura', 'trinco', 'maçaneta'], icone: '🔑' },
+  { palavras: ['eletrica', 'eletro', 'energia', 'retifica', 'lampada', 'iluminacao', 'disjuntor', 'tomada', 'quadro'], icone: '⚡' },
+  { palavras: ['incendio', 'incêndio', 'ppci', 'bombeiro', 'extintor', 'hidrante'], icone: '🧯' },
+  { palavras: ['seguranca', 'segurança', 'cftv', 'alarme', 'camera', 'câmera', 'circuito', 'acesso'], icone: '📹' },
   { palavras: ['gas', 'glp', 'gnv'], icone: '🔥' },
+  { palavras: ['hidrossanitario', 'hidraulica', 'hidro', 'agua', 'encanamento', 'esgoto', 'torneira', 'vazamento'], icone: '💧' },
+  { palavras: ['mecanic', 'chave', 'parafuso', 'rolamento', 'engrenagem', 'correia', 'motor', 'usinagem', 'rosca', 'maquina'], icone: '🛠️' },
+  { palavras: ['serrail', 'serra', 'chapa', 'solda', 'ferro', 'metal', 'aluminio', 'alumínio', 'grade', 'gradil', 'portao', 'portão', 'aco', 'aço'], icone: '🪚' },
+  { palavras: ['civil', 'estrutura', 'alvenaria', 'muro', 'concreto', 'patologia', 'rachadura', 'fissura', 'reboco'], icone: '🧱' },
   { palavras: ['climatiza', 'ar-condicionado', 'arcondicionado', 'hvac', 'refrigeracao', 'frio'], icone: '❄️' },
   { palavras: ['pintura', 'acabamento', 'revestimento', 'tinta'], icone: '🎨' },
   { palavras: ['telhado', 'cobertura', 'calha', 'forro'], icone: '🏚️' },
   { palavras: ['vidro', 'esquadria', 'janela', 'porta'], icone: '🪟' },
   { palavras: ['elevador'], icone: '🛗' },
-  { palavras: ['incendio', 'incêndio', 'ppci', 'bombeiro', 'extintor', 'hidrante'], icone: '🧯' },
-  { palavras: ['seguranca', 'segurança', 'cftv', 'alarme', 'camera', 'câmera', 'circuito'], icone: '📹' },
-  { palavras: ['fechadura', 'trinco', 'ferramenta', 'geral', 'serralheria'], icone: '🔧' },
   { palavras: ['limpeza', 'vassoura', 'higiene'], icone: '🧹' },
-  { palavras: ['preventiva', 'preditiva', 'inspecao', 'inspeção'], icone: '🛠️' }
+  { palavras: ['preventiva', 'preditiva', 'inspecao', 'inspeção', 'geral', 'ferramenta'], icone: '🗓️' }
 ];
 
 export function iconeCategoria(cat: string): string {

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../lib/auth';
 import { getConfig, setConfig, criarOS, lerPlanta, uploadFileObject } from '../lib/api';
 import { pdfParaImagem } from '../lib/pdf';
-import { gerarIdOS, dataHoje, compactarImagem, sortAlphabetical, sortRecordValues } from '../lib/types';
+import { gerarIdOS, dataHoje, compactarImagem, sortAlphabetical, sortRecordValues, iconeCategoria } from '../lib/types';
 import Mapa from './Mapa';
 
 export default function AberturaOS() {
@@ -142,7 +142,7 @@ export default function AberturaOS() {
             <label>Categoria Principal *</label>
             <select value={categoria} onChange={(e) => { setCategoria(e.target.value); setSubcategoria(''); }} required>
               <option value="">Selecione...</option>
-              {categorias.map((c) => <option key={c} value={c}>{c}</option>)}
+              {categorias.map((c) => <option key={c} value={c}>{iconeCategoria(c)} {c}</option>)}
             </select>
           </div>
           <div className="form-group">
@@ -178,7 +178,15 @@ export default function AberturaOS() {
             plantaUrl={planta}
             modoMarcacao
             aoMarcar={(x, y) => setPonto({ x, y })}
-          />
+          >
+            {ponto && (
+              <div className="map-pin" style={{ left: ponto.x + '%', top: ponto.y + '%' }} title="Ponto marcado">
+                <span className="pin-cat" style={{ borderColor: 'var(--primary)', background: '#ffffff' }}>
+                  <span className="pin-cat-emoji">{categoria ? iconeCategoria(categoria) : '📌'}</span>
+                </span>
+              </div>
+            )}
+          </Mapa>
           {podePlanta && (
             <label className="btn-map-tool" style={{ cursor: 'pointer', background: 'var(--primary)', color: '#fff', marginTop: 8, display: 'inline-flex' }}>
               📁 Carregar Planta (imagem ou PDF)
