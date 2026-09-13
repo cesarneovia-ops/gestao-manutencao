@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useCallback, CSSProperties, ReactNode } from 'react';
+import { useRef, useState, useEffect, useCallback, useMemo, CSSProperties, ReactNode } from 'react';
 import { OS, getStatusOS, STATUS_CORES, iconeCategoria, ehSerraCircular } from '../lib/types';
 
 interface MapaProps {
@@ -28,6 +28,13 @@ export default function Mapa({
   });
   const lastTouch = useRef(0);
   const [tip, setTip] = useState<{ os: OS; x: number; y: number } | null>(null);
+  const [selOS, setSelOS] = useState<OS | null>(null);
+  const [fCat, setFCat] = useState('');
+  const [fSub, setFSub] = useState('');
+
+  const cats = useMemo(() => Array.from(new Set(dados.map((o) => o.categoria).filter(Boolean))).sort((a, b) => a.localeCompare(b, 'pt-BR')), [dados]);
+  const subsDisp = useMemo(() => Array.from(new Set(dados.filter((o) => !fCat || o.categoria === fCat).map((o) => o.subcategoria).filter(Boolean))).sort((a, b) => a.localeCompare(b, 'pt-BR')), [dados, fCat]);
+  const pins = dados.filter((o) => o.map_x != null && o.map_y != null && (!fCat || o.categoria === fCat) && (!fSub || o.subcategoria === fSub));
 
   const aplicarTransform = useCallback((sc: number, p: { x: number; y: number }) => {
     const l = layerRef.current;
@@ -204,6 +211,21 @@ export default function Mapa({
           </button>
         </div>
       </div>
+      {dados.length > 0 && (
+        <div className="map-toolbar map-filters">
+          <div className="map-tools-group">
+            <select className="map-filter-select" value={fCat} onChange={(e) => { setFCat(e.target.value); setFSub(''); }} title="Filtrar por categoria">
+              <option value="">📂 Todas categorias</option>
+              {cats.map((c) => <option key={c} value={c}>{c}</option>)}
+            </select>
+            <select className="map-filter-select" value={fSub} onChange={(e) => setFSub(e.target.value)} title="Filtrar por subcategoria">
+              <option value="">🏷️ Todas subcategorias</option>
+              {subsDisp.map((s) => <option key={s} value={s}>{s}</option>)}
+            </select>
+            {(fCat || fSub) && <span style={{ fontSize: 11, fontWeight: 'bold' }}>{pins.length} pino(s)</span>}
+          </div>
+        </div>
+      )}
       <div
         ref={stageRef}
         className="map-stage"
@@ -229,14 +251,17 @@ export default function Mapa({
 
           {children}
 
-          {dados
-            .filter((o) => o.map_x != null && o.map_y != null)
-            .map((o) => (
+          {pins.map((o) => (
               <div
                 key={o.id}
                 className="map-pin"
                 style={{ left: o.map_x + '%', top: o.map_y + '%' }}
-                onMouseEnter={(e) => setTip({ os: o, x: e.clientX, y: e.clientY })}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (drag.current.moved || touch.current.moved) { drag.current.moved = false; touch.current.moved = false; return; }
+                  setSelOS(o);
+                }}
+                onMouseEnter={(e) => { if (Date.now() - lastTouch.current < 1500) return; setTip({ os: o, x: e.clientX, y: e.clientY }); }}
                 onMouseLeave={() => setTip(null)}
                 onMouseMove={(e) => setTip((t) => (t && t.os.id === o.id ? { ...t, x: e.clientX, y: e.clientY } : t))}
               >
@@ -246,12 +271,33 @@ export default function Mapa({
         </div>
 
         {tip && <TooltipMapa os={tip.os} top={tip.y} left={tip.x} />}
+        {selOS && (
+          <div className="map-os-card-overlay" onClick={() => setSelOS(null)}>
+            <div className="map-os-card" onClick={(e) => e.stopPropagation()}>
+              <button className="map-os-card-x" onClick={() => setSelOS(null)} title="Fechar">✕</button>
+              <div className="tooltip-titulo" style={{ borderColor: STATUS_CORES[getStatusOS(selOS)] }}>{selOS.id}</div>
+              {selOS.evidencia && (
+                <div className="tooltip-mini"><img src={selOS.evidencia} alt="evidência" /></div>
+              )}
+              <table className="tooltip-resumo">
+                <tbody>
+                  <tr><td>Status</td><td><strong style={{ color: STATUS_CORES[getStatusOS(selOS)] }}>{getStatusOS(selOS)}</strong></td></tr>
+                  <tr><td>Categoria</td><td>{selOS.categoria}{selOS.subcategoria ? ' › ' + selOS.subcategoria : ''}</td></tr>
+                  <tr><td>Local</td><td>{selOS.local}</td></tr>
+                  <tr><td>Solicitante</td><td>{selOS.solicitante || '—'}</td></tr>
+                  <tr><td>Responsável</td><td>{selOS.responsavel || '—'}</td></tr>
+                </tbody>
+              </table>
+              <div className="tooltip-desc">{selOS.descricao}</div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-export function IconeSerraCircular({ size = 19 }: { size?: number }) {
+export function IconeSerraCircular({ size = 14 }: { size?: number }) {
   return (
     <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.4" style={{ display: 'block' }}>
       <circle cx="12" cy="12" r="8.6" strokeWidth="1.6" />
