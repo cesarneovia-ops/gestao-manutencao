@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../lib/auth';
 import { getConfig, setConfig, criarOS, lerPlanta, uploadFileObject } from '../lib/api';
 import { pdfParaImagem } from '../lib/pdf';
-import { gerarIdOS, dataHoje, compactarImagem, sortAlphabetical, sortRecordValues, iconeCategoria } from '../lib/types';
-import Mapa from './Mapa';
+import { gerarIdOS, dataHoje, compactarImagem, sortAlphabetical, sortRecordValues, iconeCategoria, ehSerraCircular } from '../lib/types';
+import Mapa, { IconeSerraCircular } from './Mapa';
 
 export default function AberturaOS() {
   const { user } = useAuth();
@@ -181,9 +181,7 @@ export default function AberturaOS() {
           >
             {ponto && (
               <div className="map-pin" style={{ left: ponto.x + '%', top: ponto.y + '%' }} title="Ponto marcado">
-                <span className="pin-cat" style={{ borderColor: 'var(--primary)', background: '#ffffff' }}>
-                  <span className="pin-cat-emoji">{categoria ? iconeCategoria(categoria) : '📌'}</span>
-                </span>
+                <span className="pin-ico">{categoria ? (ehSerraCircular(categoria) ? <IconeSerraCircular /> : iconeCategoria(categoria)) : '📌'}</span>
               </div>
             )}
           </Mapa>

@@ -31,7 +31,7 @@ export default function Layout({ abaAtiva, onTrocarAba, children }: LayoutProps)
   ];
 
   return (
-    <div style={{ minHeight: '100vh' }}>
+    <div className={`layout-root layout-aba-${abaAtiva}`} style={{ minHeight: '100vh' }}>
       <div className="header-bar">
         <div>
           <h3 style={{ margin: 0, fontSize: 18 }}>Sistema Integrado de Manutenção Predial e OS</h3>
@@ -57,9 +57,15 @@ export default function Layout({ abaAtiva, onTrocarAba, children }: LayoutProps)
             onClick={() => onTrocarAba(a.id)}
           >
             <span className="tab-ico">{a.icone}</span>
-            {a.rotulo}
+            <span className="tab-label">{a.rotulo}</span>
           </button>
         ))}
+        <div className="tab-utils-mobile">
+          <button className="tab-btn util" onClick={logout} title="Sair">🚪</button>
+          <button className="tab-btn util" onClick={() => setDark((d) => !d)} title="Tema">
+            {dark ? '☀️' : '🌙'}
+          </button>
+        </div>
       </div>
 
       <div className="tab-content">{children}</div>

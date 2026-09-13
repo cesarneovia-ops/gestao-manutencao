@@ -240,9 +240,7 @@ export default function Mapa({
                 onMouseLeave={() => setTip(null)}
                 onMouseMove={(e) => setTip((t) => (t && t.os.id === o.id ? { ...t, x: e.clientX, y: e.clientY } : t))}
               >
-                <span className="pin-cat" style={{ borderColor: STATUS_CORES[getStatusOS(o)] }}>
-                  <span className="pin-cat-emoji">{ehSerraCircular(o.categoria) ? <IconeSerraCircular /> : iconeCategoria(o.categoria)}</span>
-                </span>
+                <span className="pin-ico" title={`${o.id} — ${getStatusOS(o)}`}>{ehSerraCircular(o.categoria) ? <IconeSerraCircular /> : iconeCategoria(o.categoria)}</span>
               </div>
             ))}
         </div>
@@ -253,9 +251,9 @@ export default function Mapa({
   );
 }
 
-function IconeSerraCircular({ size = 10 }: { size?: number }) {
+export function IconeSerraCircular({ size = 19 }: { size?: number }) {
   return (
-    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.4" style={{ display: 'block', color: '#334155' }}>
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.4" style={{ display: 'block' }}>
       <circle cx="12" cy="12" r="8.6" strokeWidth="1.6" />
       <circle cx="12" cy="12" r="8.8" strokeDasharray="2.4 1.35" strokeWidth="1.9" opacity="0.9" />
       <circle cx="12" cy="12" r="5.4" fill="currentColor" stroke="none" opacity="0.12" />
