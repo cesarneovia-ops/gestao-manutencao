@@ -70,7 +70,7 @@ export default function Layout({ abaAtiva, onTrocarAba, children }: LayoutProps)
       >
         <span className="ico">🏠</span> Início
       </button>
-      <InstalarApp />
+      {abaAtiva === 'home' && <InstalarApp />}
     </div>
   );
 }

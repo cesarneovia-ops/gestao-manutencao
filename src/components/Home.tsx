@@ -72,6 +72,27 @@ export default function Home({ aoNavegar }: { aoNavegar: (aba: AbaId) => void })
           ))
         )}
       </div>
+    <div className="home-links-box">
+        <h3 style={{ margin: '0 0 12px', fontSize: 16 }}>📥 Baixar o aplicativo</h3>
+        <div className="home-links-grid">
+          <a className="home-link-card" href="https://cesarneovia-ops.github.io/gestao-manutencao/" target="_blank" rel="noopener noreferrer">
+            <span className="home-link-ico">📱</span>
+            <span>
+              <strong>Versão Mobile</strong>
+              <small>PWA — abre no navegador e instala no celular</small>
+            </span>
+            <span className="home-link-set">→</span>
+          </a>
+          <a className="home-link-card" href="https://github.com/cesarneovia-ops/gestao-manutencao/releases/latest" target="_blank" rel="noopener noreferrer">
+            <span className="home-link-ico">🖥️</span>
+            <span>
+              <strong>Versão Windows</strong>
+              <small>Instalador desktop (GitHub Releases)</small>
+            </span>
+            <span className="home-link-set">→</span>
+          </a>
+        </div>
+      </div>
     </div>
   );
 }

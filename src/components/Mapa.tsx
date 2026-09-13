@@ -21,6 +21,10 @@ export default function Mapa({
   const [scale, setScale] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const drag = useRef({ on: false, startX: 0, startY: 0, panX: 0, panY: 0, moved: false });
+  const touch = useRef<{ mode: 'none' | 'pan' | 'pinch'; baseDist: number; baseScale: number; basePan: { x: number; y: number }; startX: number; startY: number; cx: number; cy: number; moved: boolean }>({
+    mode: 'none', baseDist: 0, baseScale: 1, basePan: { x: 0, y: 0 }, startX: 0, startY: 0, cx: 0, cy: 0, moved: false
+  });
+  const lastTouch = useRef(0);
   const [tip, setTip] = useState<{ os: OS; x: number; y: number } | null>(null);
 
   const aplicarTransform = useCallback((sc: number, p: { x: number; y: number }) => {
@@ -50,6 +54,12 @@ export default function Mapa({
     setPan({ x: 0, y: 0 });
     requestAnimationFrame(() => aplicarTransform(1, { x: 0, y: 0 }));
   }, [aplicarTransform]);
+
+  const onMouseDown = (e: React.MouseEvent) => {
+    if (e.button !== 0) return;
+    if (Date.now() - lastTouch.current < 500) return;
+    drag.current = { on: true, startX: e.clientX - pan.x, startY: e.clientY - pan.y, panX: pan.x, panY: pan.y, moved: false };
+  };
 
   const onMouseMove = (e: React.MouseEvent) => {
     const d = drag.current;
@@ -82,7 +92,71 @@ export default function Mapa({
     zoom(e.deltaY < 0 ? fator : -fator, { cx, cy });
   };
 
-  const marcar = (e: React.MouseEvent) => {
+  const onTouchStart = (e: React.TouchEvent) => {
+    lastTouch.current = Date.now();
+    const stage = stageRef.current!;
+    const rect = stage.getBoundingClientRect();
+    const t = touch.current;
+    if (e.touches.length === 1) {
+      t.mode = 'pan';
+      t.startX = e.touches[0].clientX;
+      t.startY = e.touches[0].clientY;
+      t.moved = false;
+      t.basePan = { ...pan };
+    } else if (e.touches.length === 2) {
+      t.mode = 'pinch';
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      t.baseDist = Math.hypot(dx, dy);
+      t.baseScale = scale;
+      t.basePan = { ...pan };
+      t.cx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
+      t.cy = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
+    }
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    e.preventDefault();
+    const t = touch.current;
+    if (t.mode === 'pan' && e.touches.length === 1) {
+      const dx = e.touches[0].clientX - t.startX;
+      const dy = e.touches[0].clientY - t.startY;
+      if (Math.abs(dx) > 4 || Math.abs(dy) > 4) t.moved = true;
+      const nx = t.basePan.x + dx;
+      const ny = t.basePan.y + dy;
+      setPan({ x: nx, y: ny });
+      aplicarTransform(scale, { x: nx, y: ny });
+    } else if (t.mode === 'pinch' && e.touches.length === 2) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      const dist = Math.hypot(dx, dy);
+      if (t.baseDist > 0) {
+        const ns = Math.min(Math.max(t.baseScale * (dist / t.baseDist), 0.5), 8.0);
+        const factor = ns / t.baseScale;
+        const panX = t.cx - (t.cx - t.basePan.x) * factor;
+        const panY = t.cy - (t.cy - t.basePan.y) * factor;
+        setScale(ns);
+        setPan({ x: panX, y: panY });
+        aplicarTransform(ns, { x: panX, y: panY });
+      }
+    }
+  };
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const t = touch.current;
+    if (t.mode === 'pan' && !t.moved && modoMarcacao && aoMarcar && e.changedTouches.length > 0) {
+      const layer = layerRef.current;
+      const rect = layer!.getBoundingClientRect();
+      const c = e.changedTouches[0];
+      const x = ((c.clientX - rect.left) / rect.width) * 100;
+      const y = ((c.clientY - rect.top) / rect.height) * 100;
+      if (x >= 0 && x <= 100 && y >= 0 && y <= 100) aoMarcar(Number(x.toFixed(1)), Number(y.toFixed(1)));
+    }
+    t.mode = 'none';
+    lastTouch.current = Date.now();
+  };
+
+  const tocarPonto = (e: React.MouseEvent) => {
     // usado quando o usuário clica num ponto de marcação rápido (sem arrastar)
     if (modoMarcacao && aoMarcar && !drag.current.moved) { /* já tratado no mouseUp */ }
   };
@@ -107,13 +181,14 @@ export default function Mapa({
         className="map-stage"
         style={{ height: altura, position: 'relative', overflow: 'hidden' }}
         onWheel={onWheel}
-        onMouseDown={(e) => {
-          if (e.button !== 0) return;
-          drag.current = { on: true, startX: e.clientX - pan.x, startY: e.clientY - pan.y, panX: pan.x, panY: pan.y, moved: false };
-        }}
+        onMouseDown={onMouseDown}
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
         onMouseLeave={() => { drag.current.on = false; }}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+        onTouchCancel={onTouchEnd}
       >
         <div ref={layerRef} className="map-content-layer" style={innerStyle}>
           {plantaUrl && <img className="plant-bg-img" src={plantaUrl} alt="Planta" style={{ display: 'block', width: '100%', height: '100%', objectFit: 'contain' }} />}
