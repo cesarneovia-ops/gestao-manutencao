@@ -52,7 +52,8 @@ export default function Cadastros({ aoMudarDados }: { aoMudarDados: () => void }
   }
 
   function adicionarLista(chave: string, val: string) {
-    if (!val.trim()) return;
+    if (!pode('cadastros')) return;
+    if (!val.trim()) { setMsg('Digite um valor para adicionar.'); return; }
     if (chave === 'conf_fabricas') salvarConfig(chave, [...fabricas, val.trim()]);
     else if (chave === 'conf_categorias') salvarConfig(chave, [...categorias, val.trim()]);
     else if (chave === 'conf_solicitantes') salvarConfig(chave, [...solicitantes, val.trim()]);
@@ -65,12 +66,16 @@ export default function Cadastros({ aoMudarDados }: { aoMudarDados: () => void }
   }
 
   function adicionarLocal() {
-    if (!fabSel || !novo.local.trim()) return;
+    if (!pode('cadastros')) return;
+    if (fabricas.length === 0) { setMsg('Cadastre um edifício/unidade primeiro (bloco "Edifícios / Unidades").'); return; }
+    if (!fabSel) { setMsg('Selecione um edifício acima antes de adicionar local/pavimento.'); return; }
+    if (!novo.local.trim()) { setMsg('Digite o local/pavimento para adicionar.'); return; }
     const atual = { ...locais };
     if (!atual[fabSel]) atual[fabSel] = [];
     if (!atual[fabSel].includes(novo.local.trim())) atual[fabSel] = [...atual[fabSel], novo.local.trim()];
     salvarConfig('conf_locais', atual);
     setNovo((n) => ({ ...n, local: '' }));
+    setMsg(`✅ "${novo.local.trim()}" adicionado em ${fabSel}.`);
   }
 
   function removerLocal(item: string) {
@@ -81,12 +86,16 @@ export default function Cadastros({ aoMudarDados }: { aoMudarDados: () => void }
   }
 
   function adicionarSub() {
-    if (!catSel || !novo.sub.trim()) return;
+    if (!pode('cadastros')) return;
+    if (categorias.length === 0) { setMsg('Cadastre uma categoria primeiro (bloco "Categorias de Manutenção").'); return; }
+    if (!catSel) { setMsg('Selecione a categoria acima antes de adicionar subcategoria.'); return; }
+    if (!novo.sub.trim()) { setMsg('Digite a subcategoria para adicionar.'); return; }
     const atual = { ...subs };
     if (!atual[catSel]) atual[catSel] = [];
     if (!atual[catSel].includes(novo.sub.trim())) atual[catSel] = [...atual[catSel], novo.sub.trim()];
     salvarConfig('conf_subcategorias', atual);
     setNovo((n) => ({ ...n, sub: '' }));
+    setMsg(`✅ Subcategoria "${novo.sub.trim()}" adicionada em ${catSel}.`);
   }
 
   function removerSub(item: string) {
@@ -158,11 +167,13 @@ export default function Cadastros({ aoMudarDados }: { aoMudarDados: () => void }
         valor={novo.local}
         onChange={(v) => setNovo((n) => ({ ...n, local: v }))}
         onAdd={adicionarLocal}
+        prefix={(
+          <select value={fabSel} onChange={(e) => setFabSel(e.target.value)} style={{ marginBottom: 10, display: 'block', width: '100%' }}>
+            <option value="">Selecione o edifício...</option>
+            {fabricas.map((f) => <option key={f} value={f}>{f}</option>)}
+          </select>
+        )}
       >
-        <select value={fabSel} onChange={(e) => setFabSel(e.target.value)} style={{ marginBottom: 10, display: 'block' }}>
-          <option value="">Selecione o edifício...</option>
-          {fabricas.map((f) => <option key={f} value={f}>{f}</option>)}
-        </select>
         <ul className="config-list">{(locais[fabSel] || []).map((l) => <Item chave="" valor={l} onRemover={() => removerLocal(l)} key={l} />)}</ul>
       </BlocoAdicionar>
 
@@ -180,11 +191,13 @@ export default function Cadastros({ aoMudarDados }: { aoMudarDados: () => void }
         valor={novo.sub}
         onChange={(v) => setNovo((n) => ({ ...n, sub: v }))}
         onAdd={adicionarSub}
+        prefix={(
+          <select value={catSel} onChange={(e) => setCatSel(e.target.value)} style={{ marginBottom: 10, display: 'block', width: '100%' }}>
+            <option value="">Selecione a categoria...</option>
+            {categorias.map((c) => <option key={c} value={c}>{c}</option>)}
+          </select>
+        )}
       >
-        <select value={catSel} onChange={(e) => setCatSel(e.target.value)} style={{ marginBottom: 10, display: 'block' }}>
-          <option value="">Selecione a categoria...</option>
-          {categorias.map((c) => <option key={c} value={c}>{c}</option>)}
-        </select>
         <ul className="config-list">{(subs[catSel] || []).map((s) => <Item chave="" valor={s} onRemover={() => removerSub(s)} key={s} />)}</ul>
       </BlocoAdicionar>
 
@@ -248,12 +261,13 @@ export default function Cadastros({ aoMudarDados }: { aoMudarDados: () => void }
   );
 }
 
-function BlocoAdicionar({ titulo, placeholder, valor, onChange, onAdd, children }: {
-  titulo: string; placeholder: string; valor: string; onChange: (v: string) => void; onAdd: () => void; children: React.ReactNode;
+function BlocoAdicionar({ titulo, placeholder, valor, onChange, onAdd, prefix, children }: {
+  titulo: string; placeholder: string; valor: string; onChange: (v: string) => void; onAdd: () => void; prefix?: React.ReactNode; children: React.ReactNode;
 }) {
   return (
     <div className="form-group">
       <label>{titulo}</label>
+      {prefix}
       <div style={{ display: 'flex', gap: 10 }}>
         <input type="text" placeholder={placeholder} value={valor} onChange={(e) => onChange(e.target.value)} style={{ flex: 1 }} />
         <button className="btn-action" style={{ background: 'var(--primary)' }} onClick={onAdd}>Adicionar</button>
