@@ -169,9 +169,9 @@ body.dark-mode .map-viewport-container { background: #0d1b2a; border-color: #2a3
 body.dark-mode .map-stage { background-color: #0d1b2a; background-image: radial-gradient(#1e2d42 1.5px, transparent 1.5px); }
 .map-content-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform-origin: 0 0; }
 .plant-bg-img { width: 100%; height: 100%; object-fit: contain; display: block; pointer-events: none; }
-.map-pin { position: absolute; transform: translate(-50%, -100%) scale(var(--pin-scale, 1)); cursor: pointer; z-index: 10; transition: transform 0.15s ease; color: #1f2937; }
+.map-pin { position: absolute; transform: translate(-50%, -50%) scale(var(--pin-scale, 1)); cursor: pointer; z-index: 10; transition: transform 0.15s ease; color: #1f2937; padding: 8px; }
 body.dark-mode .map-pin { color: #e8eef8; }
-.map-pin:hover { transform: translate(-50%, -115%) scale(calc(var(--pin-scale, 1) * 1.15)); z-index: 20; }
+.map-pin:hover { transform: translate(-50%, -50%) scale(calc(var(--pin-scale, 1) * 1.15)); z-index: 20; }
 .pin-ico { display: inline-flex; align-items: center; justify-content: center; font-size: 14px; line-height: 1; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5)); }
 .map-filters { border-top: 1px solid var(--border-light); }
 .map-filter-select { font-size: 12px; padding: 5px 8px; border-radius: 6px; max-width: 170px; border: 1px solid var(--border-color); background-color: var(--card-bg); color: var(--text-main); }
@@ -184,7 +184,7 @@ body.dark-mode .map-pin { color: #e8eef8; }
   .map-os-card { border-radius: 14px; }
 }
 .map-pin-pulse { animation: pulse-animation 1.5s infinite; }
-@keyframes pulse-animation { 0% { transform: translate(-50%, -100%) scale(var(--pin-scale, 1)); } 50% { transform: translate(-50%, -100%) scale(calc(var(--pin-scale, 1) * 1.15)); } 100% { transform: translate(-50%, -100%) scale(var(--pin-scale, 1)); } }
+@keyframes pulse-animation { 0% { transform: translate(-50%, -50%) scale(var(--pin-scale, 1)); } 50% { transform: translate(-50%, -50%) scale(calc(var(--pin-scale, 1) * 1.15)); } 100% { transform: translate(-50%, -50%) scale(var(--pin-scale, 1)); } }
 .map-tooltip { position: absolute; background: rgba(33, 37, 41, 0.95); color: white; padding: 10px 12px; border-radius: 6px; font-size: 12px; pointer-events: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 100; max-width: 240px; line-height: 1.4; }
 .tooltip-titulo { font-weight: bold; color: #fff; border-left: 3px solid; padding-left: 6px; margin-bottom: 6px; font-size: 12px; }
 .tooltip-mini { text-align: center; margin-bottom: 8px; }
