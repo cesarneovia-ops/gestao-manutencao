@@ -2,6 +2,7 @@ import { useEffect, useState, ReactNode } from 'react';
 import { useAuth } from '../lib/auth';
 import { ROTULO_PERFIL } from '../lib/types';
 import { BadgePerfil } from './Modal';
+import InstalarApp from './InstalarApp';
 
 export type AbaId = 'home' | 'os' | 'dashboard' | 'historico' | 'cadastros';
 
@@ -61,6 +62,7 @@ export default function Layout({ abaAtiva, onTrocarAba, children }: LayoutProps)
       </div>
 
       <div className="tab-content">{children}</div>
+      <InstalarApp />
     </div>
   );
 }
