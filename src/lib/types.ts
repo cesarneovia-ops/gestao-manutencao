@@ -82,6 +82,15 @@ export function sortAlphabetical(arr: string[]): string[] {
   return (arr || []).slice().sort((a, b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' }));
 }
 
+export function sortRecordValues(rec: Record<string, string[]>): Record<string, string[]> {
+  const out: Record<string, string[]> = {};
+  Object.keys(rec || {})
+    .slice()
+    .sort((a, b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' }))
+    .forEach((k) => { out[k] = sortAlphabetical(rec[k]); });
+  return out;
+}
+
 export function gerarIdOS(fabrica: string): string {
   const prefix = fabrica.replace(/\s+/g, '').substring(0, 4).toUpperCase();
   const dt = new Date().toISOString().slice(2, 7).replace('-', '');

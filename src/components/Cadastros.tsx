@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../lib/auth';
 import { getConfig, setConfig, supabase } from '../lib/api';
-import { Perfil, sortAlphabetical } from '../lib/types';
+import { Perfil, sortAlphabetical, sortRecordValues } from '../lib/types';
 import { BadgePerfil } from './Modal';
 
 export default function Cadastros({ aoMudarDados }: { aoMudarDados: () => void }) {
@@ -26,19 +26,19 @@ export default function Cadastros({ aoMudarDados }: { aoMudarDados: () => void }
     setCategorias(sortAlphabetical((await getConfig('conf_categorias')) || []));
     setSolicitantes(sortAlphabetical((await getConfig('conf_solicitantes')) || []));
     setResponsaveis(sortAlphabetical((await getConfig('conf_responsaveis')) || []));
-    setLocais((await getConfig('conf_locais')) || {});
-    setSubs((await getConfig('conf_subcategorias')) || {});
+    setLocais(sortRecordValues((await getConfig('conf_locais')) || {}));
+    setSubs(sortRecordValues((await getConfig('conf_subcategorias')) || {}));
     if (isDev) carregarUsuarios();
   }
 
   async function carregarUsuarios() {
     const { data, error } = await supabase.rpc('listar_usuarios' as any) as any;
+    const ordenar = (u: Perfil[]) => (u || []).sort((a: any, b: any) => (a.nome || a.usuario || '').localeCompare(b.nome || b.usuario || '', 'pt-BR', { sensitivity: 'base' }));
     if (!error && Array.isArray(data)) {
-      setUsuarios(data as Perfil[]);
+      setUsuarios(ordenar(data as Perfil[]));
     } else {
-      // fallback: consulta direta (apenas Dev tem permissão via RLS)
       const { data: d2, error: e2 } = await supabase.from('perfis').select('*');
-      if (!e2) setUsuarios((d2 || []) as Perfil[]);
+      if (!e2) setUsuarios(ordenar((d2 || []) as Perfil[]));
     }
   }
 

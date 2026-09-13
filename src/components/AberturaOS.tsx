@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../lib/auth';
 import { getConfig, setConfig, criarOS, lerPlanta, uploadFileObject } from '../lib/api';
 import { pdfParaImagem } from '../lib/pdf';
-import { gerarIdOS, dataHoje, compactarImagem, sortAlphabetical } from '../lib/types';
+import { gerarIdOS, dataHoje, compactarImagem, sortAlphabetical, sortRecordValues } from '../lib/types';
 import Mapa from './Mapa';
 
 export default function AberturaOS() {
@@ -34,7 +34,7 @@ export default function AberturaOS() {
       setFabricas(sortAlphabetical((await getConfig('conf_fabricas')) || []));
       setSolicitantes(sortAlphabetical((await getConfig('conf_solicitantes')) || []));
       setCategorias(sortAlphabetical((await getConfig('conf_categorias')) || []));
-      setLocais((await getConfig('conf_locais')) || {});
+      setLocais(sortRecordValues((await getConfig('conf_locais')) || {}));
       setSubs((await getConfig('conf_subcategorias')) || {});
       setPlanta(await lerPlanta());
     })();
