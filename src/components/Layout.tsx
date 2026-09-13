@@ -22,12 +22,12 @@ export default function Layout({ abaAtiva, onTrocarAba, children }: LayoutProps)
     localStorage.setItem('theme_mode', dark ? 'dark' : 'light');
   }, [dark]);
 
-  const abas: { id: AbaId; rotulo: string; visivel: boolean }[] = [
-    { id: 'home', rotulo: '🏠 Início', visivel: true },
-    { id: 'os', rotulo: '1. Abertura de OS', visivel: true },
-    { id: 'dashboard', rotulo: '2. Dashboard Corporativo', visivel: true },
-    { id: 'historico', rotulo: '3. Histórico e Mapa', visivel: true },
-    { id: 'cadastros', rotulo: '4. Cadastros Gerais', visivel: podeCadastros }
+  const abas: { id: AbaId; rotulo: string; icone: string; visivel: boolean }[] = [
+    { id: 'home', rotulo: 'Início', icone: '🏠', visivel: true },
+    { id: 'os', rotulo: 'Nova OS', icone: '📝', visivel: true },
+    { id: 'dashboard', rotulo: 'Dashboard', icone: '📊', visivel: true },
+    { id: 'historico', rotulo: 'Histórico', icone: '🗺️', visivel: true },
+    { id: 'cadastros', rotulo: 'Cadastros', icone: '⚙️', visivel: podeCadastros }
   ];
 
   return (
@@ -56,12 +56,20 @@ export default function Layout({ abaAtiva, onTrocarAba, children }: LayoutProps)
             className={`tab-btn ${abaAtiva === a.id ? 'active' : ''}`}
             onClick={() => onTrocarAba(a.id)}
           >
+            <span className="tab-ico">{a.icone}</span>
             {a.rotulo}
           </button>
         ))}
       </div>
 
       <div className="tab-content">{children}</div>
+      <button
+        className="btn-home-top"
+        onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); onTrocarAba('home'); }}
+        title="Voltar ao início"
+      >
+        <span className="ico">🏠</span> Início
+      </button>
       <InstalarApp />
     </div>
   );
