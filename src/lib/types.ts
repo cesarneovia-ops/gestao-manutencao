@@ -121,12 +121,21 @@ const CATEGORIA_ICONES: { palavras: string[]; icone: string }[] = [
   { palavras: ['preventiva', 'preditiva', 'inspecao', 'inspeção', 'geral', 'ferramenta'], icone: '🗓️' }
 ];
 
+export function normalizarTexto(texto: string): string {
+  return texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
 export function iconeCategoria(cat: string): string {
-  const c = String(cat || '').toLowerCase();
+  const c = normalizarTexto(String(cat || ''));
   for (const item of CATEGORIA_ICONES) {
-    if (item.palavras.some((p) => c.includes(p))) return item.icone;
+    if (item.palavras.some((p) => c.includes(normalizarTexto(p)))) return item.icone;
   }
   return '⚠️';
+}
+
+export function ehSerraCircular(cat: string): boolean {
+  const c = normalizarTexto(String(cat || ''));
+  return c.includes('serra') || c.includes('serrail');
 }
 
 export const STATUS_CORES: Record<StatusOS, string> = {

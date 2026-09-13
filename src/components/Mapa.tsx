@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback, CSSProperties, ReactNode } from 'react';
-import { OS, getStatusOS, STATUS_CORES, iconeCategoria } from '../lib/types';
+import { OS, getStatusOS, STATUS_CORES, iconeCategoria, ehSerraCircular } from '../lib/types';
 
 interface MapaProps {
   dados: OS[];                        // ordens com map_x/map_y
@@ -238,7 +238,7 @@ export default function Mapa({
                 onMouseMove={(e) => setTip((t) => (t && t.os.id === o.id ? { ...t, x: e.clientX, y: e.clientY } : t))}
               >
                 <span className="pin-cat" style={{ borderColor: STATUS_CORES[getStatusOS(o)] }}>
-                  <span className="pin-cat-emoji">{iconeCategoria(o.categoria)}</span>
+                  <span className="pin-cat-emoji">{ehSerraCircular(o.categoria) ? <IconeSerraCircular /> : iconeCategoria(o.categoria)}</span>
                 </span>
               </div>
             ))}
@@ -247,6 +247,20 @@ export default function Mapa({
         {tip && <TooltipMapa os={tip.os} top={tip.y} left={tip.x} />}
       </div>
     </div>
+  );
+}
+
+function IconeSerraCircular({ size = 14 }: { size?: number }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.4" style={{ display: 'block', color: '#334155' }}>
+      <circle cx="12" cy="12" r="8.6" strokeWidth="1.6" />
+      <circle cx="12" cy="12" r="8.8" strokeDasharray="2.4 1.35" strokeWidth="1.9" opacity="0.9" />
+      <circle cx="12" cy="12" r="5.4" fill="currentColor" stroke="none" opacity="0.12" />
+      <circle cx="12" cy="12" r="4.4" opacity="0.7" />
+      <circle cx="13" cy="10.4" r="1.1" fill="currentColor" stroke="none" opacity="0.55" />
+      <circle cx="10.8" cy="13.3" r="1.1" fill="currentColor" stroke="none" opacity="0.55" />
+      <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" />
+    </svg>
   );
 }
 
