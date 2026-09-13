@@ -151,6 +151,11 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--p
 
 /* Mapa */
 .map-viewport-container { position: relative; width: 100%; border-radius: 8px; border: 2px solid var(--border-color); background: #ffffff; overflow: hidden; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); user-select: none; transition: border-color 0.2s; touch-action: none; }
+/* Tela cheia do mapa: API fullscreen nativa + fallback overlay (iOS) */
+.map-viewport-container:fullscreen, .map-viewport-container.map-fs-overlay { width: 100vw; height: 100vh; border-radius: 0; border: none; background: #0d1b2a; position: fixed; inset: 0; z-index: 2000; }
+.map-viewport-container:fullscreen .map-stage, .map-viewport-container.map-fs-overlay .map-stage { height: calc(100vh - 96px) !important; background-color: #0d1b2a; background-image: radial-gradient(#1e2d42 1.5px, transparent 1.5px); }
+.map-viewport-container:fullscreen .map-toolbar, .map-viewport-container.map-fs-overlay .map-toolbar { background: rgba(255, 255, 255, 0.06); color: #e6edf7; border-bottom: 1px solid rgba(255, 255, 255, 0.15); }
+.map-viewport-container:fullscreen .map-tools-group span, .map-viewport-container.map-fs-overlay .map-tools-group span { color: #e6edf7; }
 body.dark-mode .map-viewport-container { background: #0d1b2a; border-color: #2a3b50; }
 .map-toolbar { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: rgba(33, 37, 41, 0.05); border-bottom: 1px solid var(--border-light); flex-wrap: wrap; gap: 8px; }
 .map-tools-group { display: flex; align-items: center; gap: 6px; }

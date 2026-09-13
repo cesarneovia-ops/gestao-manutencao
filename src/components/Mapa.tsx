@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, CSSProperties, ReactNode } from 'react';
+import { useRef, useState, useEffect, useCallback, CSSProperties, ReactNode } from 'react';
 import { OS, getStatusOS, STATUS_CORES, iconeCategoria } from '../lib/types';
 
 interface MapaProps {
@@ -18,6 +18,8 @@ export default function Mapa({
 }: MapaProps) {
   const stageRef = useRef<HTMLDivElement>(null);
   const layerRef = useRef<HTMLDivElement>(null);
+  const vpcRef = useRef<HTMLDivElement>(null);
+  const [fs, setFs] = useState(false);
   const [scale, setScale] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const drag = useRef({ on: false, startX: 0, startY: 0, panX: 0, panY: 0, moved: false });
@@ -30,6 +32,24 @@ export default function Mapa({
   const aplicarTransform = useCallback((sc: number, p: { x: number; y: number }) => {
     const l = layerRef.current;
     if (l) l.style.transform = `translate(${p.x}px, ${p.y}px) scale(${sc})`;
+  }, []);
+
+  const alternarTelaCheia = useCallback(async () => {
+    if (document.fullscreenElement) {
+      await document.exitFullscreen?.();
+      return;
+    }
+    const el = vpcRef.current;
+    if (el && el.requestFullscreen) {
+      try { await el.requestFullscreen(); return; } catch { /* fallback abaixo */ }
+    }
+    setFs(true); // iOS Safari e navegadores sem Fullscreen API
+  }, []);
+
+  useEffect(() => {
+    const onFsChange = () => setFs(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', onFsChange);
+    return () => document.removeEventListener('fullscreenchange', onFsChange);
   }, []);
 
   const zoom = useCallback((delta: number, focal?: { cx: number; cy: number }) => {
@@ -167,13 +187,18 @@ export default function Mapa({
   };
 
   return (
-    <div className="map-viewport-container">
+    <div ref={vpcRef} className={`map-viewport-container ${fs ? 'map-fs-overlay' : ''}`}>
       <div className="map-toolbar">
         <div className="map-tools-group">
           <button className="btn-map-tool" onClick={() => zoom(0.25)}>🔍 + Zoom</button>
           <button className="btn-map-tool" onClick={() => zoom(-0.25)}>🔍 - Zoom</button>
           <button className="btn-map-tool" onClick={resetar}>🔄 Enquadrar</button>
           <span style={{ fontSize: 11, fontWeight: 'bold', marginLeft: 4 }}>{Math.round(scale * 100)}%</span>
+        </div>
+        <div className="map-tools-group">
+          <button className="btn-map-tool" onClick={alternarTelaCheia}>
+            {fs || document.fullscreenElement ? '✕ Sair da tela cheia' : '⛶ Tela cheia'}
+          </button>
         </div>
       </div>
       <div
