@@ -140,7 +140,7 @@ export function ehSerraCircular(cat: string): boolean {
 
 export const STATUS_CORES: Record<StatusOS, string> = {
   Concluído: '#16a34a',
-  'Em Andamento': '#4f46e5',
+  'Em Andamento': '#00ffff',
   Reprogramado: '#d97706',
   Aberto: '#dc2626'
 };
