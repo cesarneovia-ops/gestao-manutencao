@@ -139,10 +139,10 @@ export function ehSerraCircular(cat: string): boolean {
 }
 
 export const STATUS_CORES: Record<StatusOS, string> = {
-  Concluído: '#28a745',
-  'Em Andamento': '#0d6efd',
-  Reprogramado: '#ffc107',
-  Aberto: '#dc3545'
+  Concluído: '#16a34a',
+  'Em Andamento': '#4f46e5',
+  Reprogramado: '#d97706',
+  Aberto: '#dc2626'
 };
 
 export function compactarImagem(file: File, maxWidth = 1200): Promise<string> {
