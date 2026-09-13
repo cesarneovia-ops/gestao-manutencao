@@ -95,11 +95,11 @@ function base64ToBlob(b64: string, mime: string): Blob {
 }
 
 export async function lerPlanta(): Promise<string | null> {
-  // guarda o snapshot da URL pública da planta numa config
   const url = await getConfig('planta_url');
   if (url) return url;
-  // fallback: primeiro arquivo do bucket
-  const { data, error } = await supabase.storage.from('planta').list('', { limit: 1 });
+  const { data, error } = await supabase.storage
+    .from('planta')
+    .list('', { limit: 1, sortBy: { column: 'created_at', order: 'desc' } });
   if (!error && data && data.length > 0) {
     return getPublicUrl('planta', data[0].name);
   }

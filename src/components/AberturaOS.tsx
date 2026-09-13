@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../lib/auth';
-import { getConfig, criarOS, lerPlanta, uploadFileObject } from '../lib/api';
+import { getConfig, setConfig, criarOS, lerPlanta, uploadFileObject } from '../lib/api';
 import { gerarIdOS, dataHoje, compactarImagem, sortAlphabetical } from '../lib/types';
 import Mapa from './Mapa';
 
@@ -44,10 +44,10 @@ export default function AberturaOS() {
   async function carregarPlanta(file: File) {
     if (!podePlanta) return;
     try {
-      const dataUrl = await compactarImagem(file, 1800);
-      const url = await uploadFileObject('planta', `planta-${Date.now()}.jpg`, file);
-      const final = url || dataUrl;
-      setPlanta(final);
+      const url = await uploadFileObject('planta', 'planta.jpg', file);
+      if (!url) throw new Error('falha no upload');
+      await setConfig('planta_url', url);
+      setPlanta(url);
       setMsg('✅ Planta atualizada!');
     } catch (e: any) {
       setMsg('Erro ao carregar planta: ' + e.message);
