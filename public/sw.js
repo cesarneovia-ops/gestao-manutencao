@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gm-v1';
+const CACHE_NAME = 'gm-v2';
 
 self.addEventListener('install', (e) => {
   e.waitUntil(

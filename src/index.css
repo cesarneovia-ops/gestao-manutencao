@@ -56,7 +56,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #1e1b4b 0%, #4f46e5 60%, #7c3aed 100%);
+  background-color: #1e1b4b;
+  background-image: linear-gradient(rgba(30, 27, 75, 0.45), rgba(30, 27, 75, 0.45)), var(--fundo-app, linear-gradient(135deg, #1e1b4b 0%, #4f46e5 60%, #7c3aed 100%));
+  background-size: cover;
+  background-position: center;
   padding: 20px;
 }
 .login-card {
