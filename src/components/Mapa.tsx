@@ -186,8 +186,11 @@ export default function Mapa({
     transformOrigin: '0 0'
   };
 
+  // mantém o pino com tamanho visual constante independente do zoom
+  const pinScale = 1 / scale;
+
   return (
-    <div ref={vpcRef} className={`map-viewport-container ${fs ? 'map-fs-overlay' : ''}`}>
+    <div ref={vpcRef} className={`map-viewport-container ${fs ? 'map-fs-overlay' : ''}`} style={{ ['--pin-scale' as any]: pinScale }}>
       <div className="map-toolbar">
         <div className="map-tools-group">
           <button className="btn-map-tool" onClick={() => zoom(0.25)}>🔍 + Zoom</button>
@@ -250,7 +253,7 @@ export default function Mapa({
   );
 }
 
-function IconeSerraCircular({ size = 14 }: { size?: number }) {
+function IconeSerraCircular({ size = 10 }: { size?: number }) {
   return (
     <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.4" style={{ display: 'block', color: '#334155' }}>
       <circle cx="12" cy="12" r="8.6" strokeWidth="1.6" />
