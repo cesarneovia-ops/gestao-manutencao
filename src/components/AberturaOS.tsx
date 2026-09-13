@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../lib/auth';
 import { getConfig, setConfig, criarOS, lerPlanta, uploadFileObject } from '../lib/api';
+import { pdfParaImagem } from '../lib/pdf';
 import { gerarIdOS, dataHoje, compactarImagem, sortAlphabetical } from '../lib/types';
 import Mapa from './Mapa';
 
@@ -44,7 +45,12 @@ export default function AberturaOS() {
   async function carregarPlanta(file: File) {
     if (!podePlanta) return;
     try {
-      const url = await uploadFileObject('planta', 'planta.jpg', file);
+      let arquivo = file;
+      if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+        setMsg('⏳ Convertendo PDF para imagem ultra-HD...');
+        arquivo = await pdfParaImagem(file);
+      }
+      const url = await uploadFileObject('planta', 'planta.jpg', arquivo);
       if (!url) throw new Error('falha no upload');
       await setConfig('planta_url', url);
       setPlanta(url);
@@ -175,8 +181,8 @@ export default function AberturaOS() {
           />
           {podePlanta && (
             <label className="btn-map-tool" style={{ cursor: 'pointer', background: 'var(--primary)', color: '#fff', marginTop: 8, display: 'inline-flex' }}>
-              📁 Carregar Planta
-              <input type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => e.target.files?.[0] && carregarPlanta(e.target.files[0])} />
+              📁 Carregar Planta (imagem ou PDF)
+              <input type="file" accept="image/*,application/pdf" style={{ display: 'none' }} onChange={(e) => e.target.files?.[0] && carregarPlanta(e.target.files[0])} />
             </label>
           )}
         </div>
