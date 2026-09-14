@@ -1,4 +1,4 @@
-// Tipo de perfil de usuário
+﻿// Tipo de perfil de usuÃ¡rio
 export type TipoPerfil = 'Dev' | 'Admin' | 'Usuario';
 
 export interface Perfil {
@@ -47,7 +47,7 @@ export const ROTULO_PERFIL: Record<TipoPerfil, string> = {
 
 export const PERFIS_VALIDOS: TipoPerfil[] = ['Dev', 'Admin', 'Usuario'];
 
-// Permissões por perfil (espelha backend original)
+// PermissÃµes por perfil (espelha backend original)
 export function podePerfil(p: TipoPerfil | undefined, permissao: string): boolean {
   if (!p) return false;
   switch (permissao) {
@@ -101,24 +101,24 @@ export function dataHoje(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
-// Ícones de categoria para os pinos do mapa
+// Ãcones de categoria para os pinos do mapa
 const CATEGORIA_ICONES: { palavras: string[]; icone: string }[] = [
-  { palavras: ['fechadura', 'trinco', 'maçaneta'], icone: '🔑' },
-  { palavras: ['eletrica', 'eletro', 'energia', 'retifica', 'lampada', 'iluminacao', 'disjuntor', 'tomada', 'quadro'], icone: '⚡' },
-  { palavras: ['incendio', 'incêndio', 'ppci', 'bombeiro', 'extintor', 'hidrante'], icone: '🧯' },
-  { palavras: ['seguranca', 'segurança', 'cftv', 'alarme', 'camera', 'câmera', 'circuito', 'acesso'], icone: '📹' },
-  { palavras: ['gas', 'glp', 'gnv'], icone: '🔥' },
-  { palavras: ['hidrossanitario', 'hidraulica', 'hidro', 'agua', 'encanamento', 'esgoto', 'torneira', 'vazamento'], icone: '💧' },
-  { palavras: ['mecanic', 'chave', 'parafuso', 'rolamento', 'engrenagem', 'correia', 'motor', 'usinagem', 'rosca', 'maquina'], icone: '🛠️' },
-  { palavras: ['serrail', 'serra', 'chapa', 'solda', 'ferro', 'metal', 'aluminio', 'alumínio', 'grade', 'gradil', 'portao', 'portão', 'aco', 'aço'], icone: '🪚' },
-  { palavras: ['civil', 'estrutura', 'alvenaria', 'muro', 'concreto', 'patologia', 'rachadura', 'fissura', 'reboco'], icone: '🧱' },
-  { palavras: ['climatiza', 'ar-condicionado', 'arcondicionado', 'hvac', 'refrigeracao', 'frio'], icone: '❄️' },
-  { palavras: ['pintura', 'acabamento', 'revestimento', 'tinta'], icone: '🎨' },
-  { palavras: ['telhado', 'cobertura', 'calha', 'forro'], icone: '🏚️' },
-  { palavras: ['vidro', 'esquadria', 'janela', 'porta'], icone: '🪟' },
-  { palavras: ['elevador'], icone: '🛗' },
-  { palavras: ['limpeza', 'vassoura', 'higiene'], icone: '🧹' },
-  { palavras: ['preventiva', 'preditiva', 'inspecao', 'inspeção', 'geral', 'ferramenta'], icone: '🗓️' }
+  { palavras: ['fechadura', 'trinco', 'maÃ§aneta'], icone: 'ðŸ”‘' },
+  { palavras: ['eletrica', 'eletro', 'energia', 'retifica', 'lampada', 'iluminacao', 'disjuntor', 'tomada', 'quadro'], icone: 'âš¡' },
+  { palavras: ['incendio', 'incÃªndio', 'ppci', 'bombeiro', 'extintor', 'hidrante'], icone: 'ðŸ§¯' },
+  { palavras: ['seguranca', 'seguranÃ§a', 'cftv', 'alarme', 'camera', 'cÃ¢mera', 'circuito', 'acesso'], icone: 'ðŸ“¹' },
+  { palavras: ['gas', 'glp', 'gnv'], icone: 'ðŸ”¥' },
+  { palavras: ['hidrossanitario', 'hidraulica', 'hidro', 'agua', 'encanamento', 'esgoto', 'torneira', 'vazamento'], icone: 'ðŸ’§' },
+  { palavras: ['mecanic', 'chave', 'parafuso', 'rolamento', 'engrenagem', 'correia', 'motor', 'usinagem', 'rosca', 'maquina'], icone: 'ðŸ› ï¸' },
+  { palavras: ['serrail', 'serra', 'chapa', 'solda', 'ferro', 'metal', 'aluminio', 'alumÃ­nio', 'grade', 'gradil', 'portao', 'portÃ£o', 'aco', 'aÃ§o'], icone: 'ðŸªš' },
+  { palavras: ['civil', 'estrutura', 'alvenaria', 'muro', 'concreto', 'patologia', 'rachadura', 'fissura', 'reboco'], icone: 'ðŸ§±' },
+  { palavras: ['climatiza', 'ar-condicionado', 'arcondicionado', 'hvac', 'refrigeracao', 'frio'], icone: 'â„ï¸' },
+  { palavras: ['pintura', 'acabamento', 'revestimento', 'tinta'], icone: 'ðŸŽ¨' },
+  { palavras: ['telhado', 'cobertura', 'calha', 'forro'], icone: 'ðŸšï¸' },
+  { palavras: ['vidro', 'esquadria', 'janela', 'porta'], icone: 'ðŸªŸ' },
+  { palavras: ['elevador'], icone: 'ðŸ›—' },
+  { palavras: ['limpeza', 'vassoura', 'higiene'], icone: 'ðŸ§¹' },
+  { palavras: ['preventiva', 'preditiva', 'inspecao', 'inspeÃ§Ã£o', 'geral', 'ferramenta'], icone: 'ðŸ—“ï¸' }
 ];
 
 export function normalizarTexto(texto: string): string {
@@ -130,7 +130,7 @@ export function iconeCategoria(cat: string): string {
   for (const item of CATEGORIA_ICONES) {
     if (item.palavras.some((p) => c.includes(normalizarTexto(p)))) return item.icone;
   }
-  return '⚠️';
+  return 'âš ï¸';
 }
 
 export function ehSerraCircular(cat: string): boolean {
@@ -145,23 +145,64 @@ export const STATUS_CORES: Record<StatusOS, string> = {
   Aberto: '#dc2626'
 };
 
-export function compactarImagem(file: File, maxWidth = 1200): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const img = new Image();
-      img.onload = () => {
+export async function compactarImagem(file: File, maxWidth = 800): Promise<string> {
+  // Prioridade 1 (menor memória): createImageBitmap com resizeWidth/Height faz o
+  // navegador reduzir a imagem DURANTE a decodificação nativa — a foto em resolução
+  // cheia nunca chega a ser montada na memória do aparelho.
+  const bitmapFull = await createImageBitmap(file).catch(() => null);
+  if (bitmapFull) {
+    const scale = Math.min(1, maxWidth / Math.max(1, bitmapFull.width));
+    const w = Math.max(1, Math.round(bitmapFull.width * scale));
+    const h = Math.max(1, Math.round(bitmapFull.height * scale));
+    const canvas = document.createElement('canvas');
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(bitmapFull, 0, 0, w, h);
+    }
+    bitmapFull.close();
+    return canvas.toDataURL('image/jpeg', 0.72);
+  }
+  // Fallback: decode redimensionado com resizeWidth (compatível com Safari/Edge)
+  const bitmapReduzido = await createImageBitmap(file, { resizeWidth: maxWidth, resizeQuality: 'high' }).catch(() => null);
+  if (bitmapReduzido) {
+    const canvas = document.createElement('canvas');
+    canvas.width = bitmapReduzido.width;
+    canvas.height = bitmapReduzido.height;
+    const ctx = canvas.getContext('2d');
+    if (ctx) ctx.drawImage(bitmapReduzido, 0, 0);
+    bitmapReduzido.close();
+    return canvas.toDataURL('image/jpeg', 0.72);
+  }
+  // Último recurso: canvas + Image via objectURL (sem nunca ler o arquivo por inteiro
+  // como base64, evitando estourar a memória de celulares comuns).
+  return await new Promise<string>((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.decoding = 'async';
+    img.onload = () => {
+      try {
+        const scale = Math.min(1, maxWidth / img.width);
+        const w = Math.max(1, Math.round(img.width * scale));
+        const h = Math.max(1, Math.round(img.height * scale));
         const canvas = document.createElement('canvas');
-        const scale = img.width > maxWidth ? maxWidth / img.width : 1;
-        canvas.width = Math.round(img.width * scale);
-        canvas.height = Math.round(img.height * scale);
-        canvas.getContext('2d')?.drawImage(img, 0, 0, canvas.width, canvas.height);
-        resolve(canvas.toDataURL('image/jpeg', 0.85));
-      };
-      img.onerror = reject;
-      img.src = String(reader.result);
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.imageSmoothingQuality = 'high';
+          ctx.drawImage(img, 0, 0, w, h);
+        }
+        resolve(canvas.toDataURL('image/jpeg', 0.72));
+      } catch (e) {
+        reject(e);
+      } finally {
+        URL.revokeObjectURL(url);
+      }
     };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Imagem inválida')); };
+    img.src = url;
   });
 }

@@ -208,7 +208,7 @@ export default function AberturaOS() {
               const f = e.target.files?.[0];
               if (f) {
                 setFotoFile(f);
-                setEvidencia(await compactarImagem(f, 1200));
+                setEvidencia(await compactarImagem(f, 900));
               }
             }}
           />
