@@ -1,4 +1,4 @@
-﻿// Tipo de perfil de usuÃ¡rio
+﻿// Tipo de perfil de usuário
 export type TipoPerfil = 'Dev' | 'Admin' | 'Usuario';
 
 export interface Perfil {
@@ -47,7 +47,7 @@ export const ROTULO_PERFIL: Record<TipoPerfil, string> = {
 
 export const PERFIS_VALIDOS: TipoPerfil[] = ['Dev', 'Admin', 'Usuario'];
 
-// PermissÃµes por perfil (espelha backend original)
+// Permissões por perfil (espelha backend original)
 export function podePerfil(p: TipoPerfil | undefined, permissao: string): boolean {
   if (!p) return false;
   switch (permissao) {
@@ -64,11 +64,8 @@ export function podePerfil(p: TipoPerfil | undefined, permissao: string): boolea
   }
 }
 
-export function formatarData(d: string | null | undefined): string {
-  if (!d) return '';
-  const partes = String(d).split('-');
-  if (partes.length === 3) return `${partes[2]}/${partes[1]}/${partes[0]}`;
-  return String(d);
+export function normalizarTexto(texto: string): string {
+  return texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
 export function escapeHTML(str: string | null | undefined): string {
@@ -101,36 +98,45 @@ export function dataHoje(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
-// Ãcones de categoria para os pinos do mapa
-const CATEGORIA_ICONES: { palavras: string[]; icone: string }[] = [
-  { palavras: ['fechadura', 'trinco', 'maÃ§aneta'], icone: 'ðŸ”‘' },
-  { palavras: ['eletrica', 'eletro', 'energia', 'retifica', 'lampada', 'iluminacao', 'disjuntor', 'tomada', 'quadro'], icone: 'âš¡' },
-  { palavras: ['incendio', 'incÃªndio', 'ppci', 'bombeiro', 'extintor', 'hidrante'], icone: 'ðŸ§¯' },
-  { palavras: ['seguranca', 'seguranÃ§a', 'cftv', 'alarme', 'camera', 'cÃ¢mera', 'circuito', 'acesso'], icone: 'ðŸ“¹' },
-  { palavras: ['gas', 'glp', 'gnv'], icone: 'ðŸ”¥' },
-  { palavras: ['hidrossanitario', 'hidraulica', 'hidro', 'agua', 'encanamento', 'esgoto', 'torneira', 'vazamento'], icone: 'ðŸ’§' },
-  { palavras: ['mecanic', 'chave', 'parafuso', 'rolamento', 'engrenagem', 'correia', 'motor', 'usinagem', 'rosca', 'maquina'], icone: 'ðŸ› ï¸' },
-  { palavras: ['serrail', 'serra', 'chapa', 'solda', 'ferro', 'metal', 'aluminio', 'alumÃ­nio', 'grade', 'gradil', 'portao', 'portÃ£o', 'aco', 'aÃ§o'], icone: 'ðŸªš' },
-  { palavras: ['civil', 'estrutura', 'alvenaria', 'muro', 'concreto', 'patologia', 'rachadura', 'fissura', 'reboco'], icone: 'ðŸ§±' },
-  { palavras: ['climatiza', 'ar-condicionado', 'arcondicionado', 'hvac', 'refrigeracao', 'frio'], icone: 'â„ï¸' },
-  { palavras: ['pintura', 'acabamento', 'revestimento', 'tinta'], icone: 'ðŸŽ¨' },
-  { palavras: ['telhado', 'cobertura', 'calha', 'forro'], icone: 'ðŸšï¸' },
-  { palavras: ['vidro', 'esquadria', 'janela', 'porta'], icone: 'ðŸªŸ' },
-  { palavras: ['elevador'], icone: 'ðŸ›—' },
-  { palavras: ['limpeza', 'vassoura', 'higiene'], icone: 'ðŸ§¹' },
-  { palavras: ['preventiva', 'preditiva', 'inspecao', 'inspeÃ§Ã£o', 'geral', 'ferramenta'], icone: 'ðŸ—“ï¸' }
-];
-
-export function normalizarTexto(texto: string): string {
-  return texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+export function formatarData(d: string | null | undefined): string {
+  if (!d) return '';
+  return String(d);
 }
+
+// Ícones de categoria para os pinos do mapa
+const CATEGORIA_ICONES: { palavras: string[]; icone: string }[] = [
+  { palavras: ['fechadura', 'trinco', 'maçaneta'], icone: '🔑' },
+  { palavras: ['eletrica', 'eletro', 'energia', 'retifica', 'lampada', 'iluminacao', 'disjuntor', 'tomada', 'quadro'], icone: '⚡' },
+  { palavras: ['incendio', 'incêndio', 'ppci', 'bombeiro', 'extintor', 'hidrante'], icone: '🧯' },
+  { palavras: ['seguranca', 'segurança', 'cftv', 'alarme', 'camera', 'câmera', 'circuito', 'acesso'], icone: '📹' },
+  { palavras: ['gas', 'glp', 'gnv'], icone: '🔥' },
+  { palavras: ['hidrossanitario', 'hidraulica', 'hidro', 'agua', 'encanamento', 'esgoto', 'torneira', 'vazamento'], icone: '💧' },
+  { palavras: ['mecanic', 'chave', 'parafuso', 'rolamento', 'engrenagem', 'correia', 'motor', 'usinagem', 'rosca', 'maquina'], icone: '🛠️' },
+  { palavras: ['serrail', 'serra', 'chapa', 'solda', 'ferro', 'metal', 'aluminio', 'alumínio', 'grade', 'gradil', 'portao', 'portão', 'aco', 'aço'], icone: '🪚' },
+  { palavras: ['civil', 'estrutura', 'alvenaria', 'muro', 'concreto', 'patologia', 'rachadura', 'fissura', 'reboco'], icone: '🧱' },
+  { palavras: ['climatiza', 'ar-condicionado', 'arcondicionado', 'hvac', 'refrigeracao', 'frio', 'ventilacao', 'exaustao'], icone: '❄️' },
+  { palavras: ['pintura', 'acabamento', 'revestimento', 'tinta'], icone: '🎨' },
+  { palavras: ['telhado', 'cobertura', 'calha', 'forro', 'impermeabiliza', 'infiltracao', 'gesso', 'drywall'], icone: '🏚️' },
+  { palavras: ['vidro', 'esquadria', 'janela', 'porta'], icone: '🪟' },
+  { palavras: ['elevador'], icone: '🛗' },
+  { palavras: ['limpeza', 'vassoura', 'higiene'], icone: '🧹' },
+  { palavras: ['marcenaria', 'marceneiro', 'madeira', 'mdf', 'movel', 'armario'], icone: '🪵' },
+  { palavras: ['jardinagem', 'jardim', 'grama', 'poda', 'paisagismo'], icone: '🌱' },
+  { palavras: ['dedetizacao', 'dedetizar', 'praga', 'cupim', 'barata', 'formiga'], icone: '🐜' },
+  { palavras: ['interfonia', 'telefonia'], icone: '📞' },
+  { palavras: ['preventiva', 'preditiva', 'inspecao', 'inspeção', 'geral', 'ferramenta'], icone: '🔍' }
+];
 
 export function iconeCategoria(cat: string): string {
   const c = normalizarTexto(String(cat || ''));
+  const cSemEspaco = c.replace(/[\s\-_./]+/g, '');
   for (const item of CATEGORIA_ICONES) {
-    if (item.palavras.some((p) => c.includes(normalizarTexto(p)))) return item.icone;
+    if (item.palavras.some((p) => {
+      const pn = normalizarTexto(p);
+      return c.includes(pn) || cSemEspaco.includes(pn.replace(/[\s\-_./]+/g, ''));
+    })) return item.icone;
   }
-  return 'âš ï¸';
+  return '⚠️';
 }
 
 export function ehSerraCircular(cat: string): boolean {
@@ -144,6 +150,22 @@ export const STATUS_CORES: Record<StatusOS, string> = {
   Reprogramado: '#d97706',
   Aberto: '#dc2626'
 };
+
+// Separação usada para guardar MÚLTIPLAS evidências no campo text `evidencia`.
+// É um separador impossível de aparecer em dataURL/base64 ou em URLs comuns,
+// então registros antigos (uma única foto) continuam funcionando normalmente.
+const SEP_EVIDENCIAS = '|SPLIT|';
+
+export function evidenciasDeOS(os: OS | null | undefined): string[] {
+  const ev = os?.evidencia;
+  if (!ev) return [];
+  const partes = String(ev).split(SEP_EVIDENCIAS).filter(Boolean);
+  return partes.length > 0 ? partes : [];
+}
+
+export function juntarEvidencias(lista: (string | null | undefined)[]): string {
+  return (lista || []).filter(Boolean).join(SEP_EVIDENCIAS);
+}
 
 export async function compactarImagem(file: File, maxWidth = 800): Promise<string> {
   // Prioridade 1 (menor memória): createImageBitmap com resizeWidth/Height faz o
@@ -165,7 +187,7 @@ export async function compactarImagem(file: File, maxWidth = 800): Promise<strin
     bitmapFull.close();
     return canvas.toDataURL('image/jpeg', 0.72);
   }
-  // Fallback: decode redimensionado com resizeWidth (compatível com Safari/Edge)
+  // Prioridade 2: createImageBitmap com resizeWidth já reduzido (compatível Safari/Edge)
   const bitmapReduzido = await createImageBitmap(file, { resizeWidth: maxWidth, resizeQuality: 'high' }).catch(() => null);
   if (bitmapReduzido) {
     const canvas = document.createElement('canvas');

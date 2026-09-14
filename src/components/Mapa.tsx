@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback, useMemo, CSSProperties, ReactNode } from 'react';
-import { OS, getStatusOS, STATUS_CORES, iconeCategoria, ehSerraCircular } from '../lib/types';
+import { OS, getStatusOS, STATUS_CORES, iconeCategoria, ehSerraCircular, evidenciasDeOS } from '../lib/types';
 
 interface MapaProps {
   dados: OS[];                        // ordens com map_x/map_y
@@ -276,9 +276,9 @@ export default function Mapa({
             <div className="map-os-card" onClick={(e) => e.stopPropagation()}>
               <button className="map-os-card-x" onClick={() => setSelOS(null)} title="Fechar">✕</button>
               <div className="tooltip-titulo" style={{ borderColor: STATUS_CORES[getStatusOS(selOS)] }}>{selOS.id}</div>
-              {selOS.evidencia && (
-                <div className="tooltip-mini"><img src={selOS.evidencia} alt="evidência" /></div>
-              )}
+              {evidenciasDeOS(selOS).map((ev, i) => (
+                <div className="map-os-card-evid" key={i}><img src={ev} alt={`evidência ${i + 1}`} /></div>
+              ))}
               <table className="tooltip-resumo">
                 <tbody>
                   <tr><td>Status</td><td><strong style={{ color: STATUS_CORES[getStatusOS(selOS)] }}>{getStatusOS(selOS)}</strong></td></tr>

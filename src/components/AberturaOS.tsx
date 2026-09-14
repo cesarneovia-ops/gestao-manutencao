@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../lib/auth';
 import { getConfig, setConfig, criarOS, lerPlanta, uploadFileObject } from '../lib/api';
 import { pdfParaImagem } from '../lib/pdf';
-import { gerarIdOS, dataHoje, compactarImagem, sortAlphabetical, sortRecordValues, iconeCategoria, ehSerraCircular } from '../lib/types';
+import { gerarIdOS, dataHoje, compactarImagem, sortAlphabetical, sortRecordValues, iconeCategoria, ehSerraCircular, juntarEvidencias } from '../lib/types';
 import Mapa, { IconeSerraCircular } from './Mapa';
 
 export default function AberturaOS() {
@@ -203,13 +203,13 @@ export default function AberturaOS() {
           <input
             type="file"
             accept="image/*"
-            capture="environment"
+            multiple
             onChange={async (e) => {
-              const f = e.target.files?.[0];
-              if (f) {
-                setFotoFile(f);
-                setEvidencia(await compactarImagem(f, 900));
-              }
+              const fs = e.target.files ? Array.from(e.target.files) : [];
+              if (fs.length === 0) return;
+              setFotoFile(fs[0]); // fallback: primeira foto
+              const comprimidas = await Promise.all(fs.map((f) => compactarImagem(f, 900)));
+              setEvidencia(juntarEvidencias(comprimidas));
             }}
           />
           <small style={{ color: 'var(--text-muted)', marginTop: 5 }}>{evidencia ? '✅ Imagem anexada.' : ''}</small>
